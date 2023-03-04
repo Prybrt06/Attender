@@ -13,14 +13,29 @@ class StorageHandler {
 
   String listKey = "attendenceList";
 
-  void getAttendence() {
-    String attendanceString = _preferencs!.getString(listKey)!;
+  String getAttendenceJsonString() {
+    return _preferencs!.getString(listKey) ?? "";
+  }
+
+  int getAttendence() {
+    String attendanceString = getAttendenceJsonString();
+    if (attendanceString == "") {
+      return 0;
+    }
+    // print(attendanceString);
     List attendances = jsonDecode(attendanceString);
+
+    // print(attendances);
 
     for (var attendance in attendances) {
       attendences.add(AttendanceModel.fromJson(attendance));
     }
+
+    return 1;
   }
 
-  void saveAttendence() {}
+  void saveAttendence(List<AttendanceModel> attendence) {
+    String jsonData = jsonEncode(attendence);
+    _preferencs!.setString(listKey, jsonData);
+  }
 }
