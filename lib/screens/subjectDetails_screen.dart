@@ -1,3 +1,4 @@
+import 'package:attender/Data/attendaceData.dart';
 import 'package:attender/Model/AttendanceModel.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
@@ -56,30 +57,62 @@ class _SubjectDetailsScreenState extends State<SubjectDetailsScreen> {
   }
 }
 
-class EditPopUp extends StatelessWidget {
+class EditPopUp extends StatefulWidget {
   final AttendanceModel attendence;
   final Function editSubject;
   final VoidCallback update;
-  const EditPopUp(
-      {required this.attendence,
-      required this.editSubject,
-      required this.update});
+  EditPopUp({
+    required this.attendence,
+    required this.editSubject,
+    required this.update,
+  });
 
+  @override
+  State<EditPopUp> createState() => _EditPopUpState();
+}
+
+class _EditPopUpState extends State<EditPopUp> {
+  void incTotalClass(AttendanceModel at) {
+    setState(() {
+      at.totalClasses++;
+    });
+  }
+
+  void decTotalClass(AttendanceModel at) {
+    setState(() {
+      at.totalClasses--;
+    });
+  }
+
+  void incAttendedClass(AttendanceModel at) {
+    setState(() {
+      at.attendedClasses++;
+    });
+  }
+
+  void decAttendedClass(AttendanceModel at) {
+    setState(() {
+      at.attendedClasses--;
+    });
+  }
+
+  // var totalClass = 1;
   @override
   Widget build(BuildContext context) {
     TextEditingController subjectCodeCotroller = TextEditingController();
-    subjectCodeCotroller.text = attendence.subjectCode;
+    subjectCodeCotroller.text = widget.attendence.subjectCode;
     return AlertDialog(
       content: Container(
         height: 400,
-        width: 400,
+        width: 420,
+        // padding: EdgeInsets.all(5),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Text(
-              attendence.subjectName,
+              widget.attendence.subjectName,
               style: TextStyle(
-                fontSize: 20,
+                fontSize: 30,
               ),
             ),
             SizedBox(
@@ -94,19 +127,92 @@ class EditPopUp extends StatelessWidget {
             SizedBox(
               height: 20,
             ),
+            Text('Total Class'),
+            SizedBox(
+              height: 5,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    incTotalClass(widget.attendence);
+                  },
+                  child: Icon(
+                    Icons.add,
+                  ),
+                ),
+                SizedBox(
+                  width: 20,
+                ),
+                Text(widget.attendence.totalClasses.toString()),
+                SizedBox(
+                  width: 20,
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    decTotalClass(widget.attendence);
+                  },
+                  child: Icon(
+                    Icons.remove,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 15,
+            ),
+            Text('Attended Class'),
+            SizedBox(
+              height: 5,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    incAttendedClass(widget.attendence);
+                  },
+                  child: Icon(
+                    Icons.add,
+                  ),
+                ),
+                SizedBox(
+                  width: 20,
+                ),
+                Text(widget.attendence.attendedClasses.toString()),
+                SizedBox(
+                  width: 20,
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    decAttendedClass(widget.attendence);
+                  },
+                  child: Icon(
+                    Icons.remove,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 30,
+            ),
             ElevatedButton(
               onPressed: () {
                 AttendanceModel attendance = AttendanceModel(
-                  subjectName: attendence.subjectName,
+                  subjectName: widget.attendence.subjectName,
                   subjectCode: subjectCodeCotroller.text,
-                  totalClasses: attendence.totalClasses,
-                  attendedClasses: attendence.attendedClasses,
+                  totalClasses: widget.attendence.totalClasses,
+                  attendedClasses: widget.attendence.attendedClasses,
                 );
-                editSubject(attendance);
+                widget.editSubject(attendance);
                 Navigator.of(context).pop();
-                update;
+                widget.update;
               },
-              child: Text("Save"),
+              child: Text(
+                "Save",
+                style: TextStyle(fontSize: 20),
+              ),
             ),
             // TextFormField(
             //   controller: subjectCodeCotroller,
