@@ -17,6 +17,14 @@ class StorageHandler {
     return _preferencs!.getString(listKey) ?? "";
   }
 
+  void setToken(String token) {
+    _preferencs!.setString('token', token);
+  }
+
+  String getToken() {
+    return _preferencs!.getString('token') ?? "";
+  }
+
   int getAttendence() {
     String attendanceString = getAttendenceJsonString();
     if (attendanceString == "") {
