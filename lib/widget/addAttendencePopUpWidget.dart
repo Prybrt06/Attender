@@ -1,4 +1,6 @@
+import 'package:attender/Provider/subjectProvider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../Model/AttendanceModel.dart';
 
@@ -30,18 +32,23 @@ class AddAttendacePopUp extends StatelessWidget {
               ),
             ),
             ElevatedButton(
-              onPressed: () {
-                AttendanceModel attendence = AttendanceModel(
+              onPressed: () async {
+                // attendences.add(attendence);
+                String resText =
+                    await Provider.of<SubjectProvider>(context, listen: false)
+                        .addSubject(
                   subjectName: subjectController.text,
                   subjectCode: codeController.text,
-                  totalClasses: 0,
-                  attendedClasses: 0,
                 );
-
-                // attendences.add(attendence);
-                addAttendence(attendence);
-
                 Navigator.of(context).pop();
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      resText,
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                );
               },
               child: const Text("Submit"),
             ),

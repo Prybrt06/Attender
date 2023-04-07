@@ -25,6 +25,10 @@ class StorageHandler {
     return _preferencs!.getString('token') ?? "";
   }
 
+  void removeToken() {
+    _preferencs!.setString('token', "");
+  }
+
   int getAttendence() {
     String attendanceString = getAttendenceJsonString();
     if (attendanceString == "") {
@@ -36,7 +40,7 @@ class StorageHandler {
     // print(attendances);
 
     for (var attendance in attendances) {
-      attendences.add(AttendanceModel.fromJson(attendance));
+      // attendences.add(AttendanceModel.fromJson(attendance));
     }
 
     return 1;

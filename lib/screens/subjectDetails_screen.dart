@@ -200,6 +200,7 @@ class _EditPopUpState extends State<EditPopUp> {
             ElevatedButton(
               onPressed: () {
                 AttendanceModel attendance = AttendanceModel(
+                  id: widget.attendence.id,
                   subjectName: widget.attendence.subjectName,
                   subjectCode: subjectCodeCotroller.text,
                   totalClasses: widget.attendence.totalClasses,

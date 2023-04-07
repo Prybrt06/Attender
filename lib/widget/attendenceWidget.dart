@@ -1,7 +1,9 @@
 import 'package:attender/Data/attendaceData.dart';
+import 'package:attender/Provider/subjectProvider.dart';
 import 'package:attender/screens/subjectDetails_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:provider/provider.dart';
 
 import '../Model/AttendanceModel.dart';
 
@@ -258,9 +260,26 @@ class _AttendenceWidgetState extends State<AttendenceWidget> {
                                     MainAxisAlignment.spaceAround,
                                 children: [
                                   ElevatedButton(
-                                    onPressed: () {
-                                      widget.deleteSubject(widget.attendence);
+                                    onPressed: () async {
+                                      String resText =
+                                          await Provider.of<SubjectProvider>(
+                                                  context,
+                                                  listen: false)
+                                              .deleteSubject(
+                                        id: widget.attendence.id,
+                                      );
                                       Navigator.of(context).pop();
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                          content: Text(
+                                            resText,
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          ),
+                                        ),
+                                      );
+                                      setState(() {});
                                     },
                                     child: const Text(
                                       "YES",

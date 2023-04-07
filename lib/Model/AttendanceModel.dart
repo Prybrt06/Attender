@@ -1,10 +1,12 @@
 class AttendanceModel {
+  String id;
   String subjectName;
   String subjectCode;
   int totalClasses;
   int attendedClasses;
 
   AttendanceModel({
+    required this.id,
     required this.subjectName,
     required this.subjectCode,
     required this.totalClasses,
@@ -13,6 +15,7 @@ class AttendanceModel {
 
   static fromJson(jsonData) {
     return AttendanceModel(
+      id: jsonData['id'],
       subjectName: jsonData['subjectName'],
       subjectCode: jsonData['subjectCode'],
       totalClasses: jsonData['totalClasses'],
@@ -21,6 +24,7 @@ class AttendanceModel {
   }
 
   Map<String, dynamic> toJson() => {
+        'id': id,
         'subjectName': subjectName,
         'subjectCode': subjectCode,
         'totalClasses': totalClasses,

@@ -8,7 +8,7 @@ class SignUpScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        padding: EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
         child: ListView(
           children: [
             SizedBox(
@@ -17,8 +17,8 @@ class SignUpScreen extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text('A', style: TextStyle(fontSize: 40,color: Colors.purple)),
-                Text('ttender', style: TextStyle(fontSize: 40)),
+                const Text('A', style: TextStyle(fontSize: 40,color: Colors.purple)),
+                const Text('ttender', style: TextStyle(fontSize: 40)),
               ],
             ),
             SizedBox(
