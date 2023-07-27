@@ -21,8 +21,20 @@ CREATE TABLE "Subject" (
     CONSTRAINT "Subject_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "Update" (
+    "id" TEXT NOT NULL,
+    "isAttended" BOOLEAN NOT NULL,
+    "subjectId" TEXT NOT NULL,
+
+    CONSTRAINT "Update_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "User_username_key" ON "User"("username");
 
 -- AddForeignKey
 ALTER TABLE "Subject" ADD CONSTRAINT "Subject_belongsToId_fkey" FOREIGN KEY ("belongsToId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Update" ADD CONSTRAINT "Update_subjectId_fkey" FOREIGN KEY ("subjectId") REFERENCES "Subject"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

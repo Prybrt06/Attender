@@ -17,14 +17,27 @@ model User {
   password  String
   createdAt DateTime  @default(now())
   subjects  Subject[]
+  updates   Update[]
 }
 
 model Subject {
   id              String   @id @default(uuid())
   name            String   @db.VarChar(255)
+  subjectCode     String   @db.VarChar(255)
   createdAt       DateTime @default(now())
   belongsToId     String
   belongsTo       User     @relation(fields: [belongsToId], references: [id])
-  totalClasses    Int
-  attendedClasses Int
+  totalClasses    Int      @default(0)
+  attendedClasses Int      @default(0)
+  updates         Update[]
+}
+
+model Update {
+  id              String   @id @default(uuid())
+  createdAt       DateTime @default(now())
+  isAttended      Boolean
+  subjectId       String
+  subject         Subject  @relation(fields: [subjectId], references: [id])
+  belongsToUserId String
+  belongsToUser   User     @relation(fields: [belongsToUserId], references: [id])
 }
