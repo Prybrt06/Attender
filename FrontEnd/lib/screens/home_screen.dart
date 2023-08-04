@@ -5,10 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
-import '../Model/AttendanceModel.dart';
+import '../Model/SubjectModel.dart';
 import '../widget/addAttendencePopUpWidget.dart';
-import '../widget/attendenceWidget.dart';
-
+import '../widget/subjectWidget.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key, required this.title});
@@ -92,9 +91,7 @@ class _HomeScreenState extends State<HomeScreen> {
           showDialog(
             context: context,
             builder: (context) {
-              return AddAttendacePopUp(
-                addAttendence: () {},
-              );
+              return AddAttendacePopUp();
             },
           );
         },
@@ -102,10 +99,10 @@ class _HomeScreenState extends State<HomeScreen> {
       body: SafeArea(
         child: FutureBuilder(
           future: Provider.of<SubjectProvider>(context, listen: false)
-              .getAllAttendences(),
+              .getAllSubject(),
           builder: (context, AsyncSnapshot snapshot) {
             if (snapshot.hasData) {
-              List<AttendanceModel> attendences = snapshot.data;
+              List<SubjectModel> attendences = snapshot.data;
               // String data = jsonEncode(snapshot.data);
               // print(data);
               return Container(
@@ -115,17 +112,21 @@ class _HomeScreenState extends State<HomeScreen> {
                     ? Center(
                         child: LottieBuilder.asset('assets/json/empty.json'),
                       )
-                    : ListView(
-                        // scrollDirection: Axis.vertical,
-                        children: attendences
-                            .map(
-                              (e) => AttendenceWidget(
-                                attendence: e,
-                                editSubject: () {},
-                                deleteSubject: () {},
-                              ),
-                            )
-                            .toList(),
+                    : RefreshIndicator(
+                        onRefresh: () async {
+                          setState(() {});
+                        },
+                        child: ListView(
+                          children: attendences
+                              .map(
+                                (e) => SubjectWidget(
+                                  subject: e,
+                                  editSubject: () {},
+                                  deleteSubject: () {},
+                                ),
+                              )
+                              .toList(),
+                        ),
                       ),
               );
             } else {

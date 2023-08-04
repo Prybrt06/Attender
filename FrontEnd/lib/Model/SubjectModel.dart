@@ -1,11 +1,11 @@
-class AttendanceModel {
+class SubjectModel {
   String id;
   String subjectName;
   String subjectCode;
   int totalClasses;
   int attendedClasses;
 
-  AttendanceModel({
+  SubjectModel({
     required this.id,
     required this.subjectName,
     required this.subjectCode,
@@ -14,7 +14,7 @@ class AttendanceModel {
   });
 
   static fromJson(jsonData) {
-    return AttendanceModel(
+    return SubjectModel(
       id: jsonData['id'],
       subjectName: jsonData['subjectName'],
       subjectCode: jsonData['subjectCode'],

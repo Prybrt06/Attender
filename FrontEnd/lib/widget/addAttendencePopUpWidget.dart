@@ -3,9 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class AddAttendacePopUp extends StatelessWidget {
-  final Function addAttendence;
-  const AddAttendacePopUp({required this.addAttendence});
-
   @override
   Widget build(BuildContext context) {
     TextEditingController subjectController = TextEditingController();

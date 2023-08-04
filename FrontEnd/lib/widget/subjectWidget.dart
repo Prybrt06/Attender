@@ -4,22 +4,22 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
-import '../Model/AttendanceModel.dart';
+import '../Model/SubjectModel.dart';
 
-class AttendenceWidget extends StatefulWidget {
+class SubjectWidget extends StatefulWidget {
   final Function editSubject;
-  final AttendanceModel attendence;
+  final SubjectModel subject;
   final Function deleteSubject;
-  const AttendenceWidget(
-      {required this.attendence,
+  const SubjectWidget(
+      {required this.subject,
       required this.editSubject,
       required this.deleteSubject});
 
   @override
-  State<AttendenceWidget> createState() => _AttendenceWidgetState();
+  State<SubjectWidget> createState() => _SubjectWidgetState();
 }
 
-class _AttendenceWidgetState extends State<AttendenceWidget> {
+class _SubjectWidgetState extends State<SubjectWidget> {
   int calculateReqClass(int totalClass, int attendedClass) {
     if (totalClass == 0) {
       return 0;
@@ -40,7 +40,7 @@ class _AttendenceWidgetState extends State<AttendenceWidget> {
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (context) => SubjectDetailsScreen(
-              attendance: widget.attendence,
+              attendance: widget.subject,
               editSubject: widget.editSubject,
             ),
           ),
@@ -65,7 +65,7 @@ class _AttendenceWidgetState extends State<AttendenceWidget> {
             child: Column(
               children: [
                 Lottie.asset(
-                  (widget.attendence.subjectCode.toLowerCase().contains('cs'))
+                  (widget.subject.subjectCode.toLowerCase().contains('cs'))
                       ? 'assets/json/cs.json'
                       : 'assets/json/ma.json',
                   height: 150,
@@ -94,16 +94,20 @@ class _AttendenceWidgetState extends State<AttendenceWidget> {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                widget.attendence.subjectName,
-                                style: const TextStyle(
-                                    fontSize: 25, fontWeight: FontWeight.bold),
+                              Container(
+                                width: 250,
+                                child: Text(
+                                  widget.subject.subjectName,
+                                  overflow: TextOverflow.clip,
+                                  style: const TextStyle(
+                                      fontSize: 25, fontWeight: FontWeight.bold),
+                                ),
                               ),
                               const SizedBox(
                                 height: 10,
                               ),
                               Text(
-                                widget.attendence.subjectCode,
+                                widget.subject.subjectCode,
                               ),
                             ],
                           ),
@@ -112,8 +116,9 @@ class _AttendenceWidgetState extends State<AttendenceWidget> {
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
                               Text(
-                                  "Attended : ${widget.attendence.attendedClasses}"),
-                              Text("Total : ${widget.attendence.totalClasses}")
+                                "Attended : ${widget.subject.attendedClasses}",
+                              ),
+                              Text("Total : ${widget.subject.totalClasses}")
                               // IconButton(
                               //   icon: const Icon(Icons.done),
                               //   onPressed: () {},
@@ -139,12 +144,29 @@ class _AttendenceWidgetState extends State<AttendenceWidget> {
                                 // minimumSize: MediaQuery.of(context).size * 0.25,
                                 shadowColor: Colors.black,
                               ),
-                              onPressed: () {
-                                widget.attendence.totalClasses =
-                                    widget.attendence.totalClasses + 1;
-                                widget.attendence.attendedClasses =
-                                    widget.attendence.attendedClasses + 1;
-                                widget.editSubject(widget.attendence);
+                              onPressed: () async {
+                                widget.subject.totalClasses =
+                                    widget.subject.totalClasses + 1;
+                                widget.subject.attendedClasses =
+                                    widget.subject.attendedClasses + 1;
+                                int statusCode =
+                                    await Provider.of<SubjectProvider>(context,
+                                            listen: false)
+                                        .markAttendance(
+                                  attendedClasses:
+                                      widget.subject.attendedClasses,
+                                  totalClasses: widget.subject.totalClasses,
+                                  isAttended: true,
+                                  id: widget.subject.id,
+                                );
+
+                                String statusText = "";
+
+                                if (statusCode == 201) {
+                                  statusText = "Attendance Marked Successfully";
+                                } else {
+                                  statusText = "Unable to mark the attendance";
+                                }
                                 setState(() {});
                               },
                               child: const Text(
@@ -161,12 +183,12 @@ class _AttendenceWidgetState extends State<AttendenceWidget> {
                               child: Center(
                                 child: Text(
                                   (calculateReqClass(
-                                            widget.attendence.totalClasses,
-                                            widget.attendence.attendedClasses,
+                                            widget.subject.totalClasses,
+                                            widget.subject.attendedClasses,
                                           ) ==
                                           0)
                                       ? "Great you already have 75% attendance"
-                                      : "You have to attend next ${calculateReqClass(widget.attendence.totalClasses, widget.attendence.attendedClasses)} class to gain 75% attendence",
+                                      : "You have to attend next ${calculateReqClass(widget.subject.totalClasses, widget.subject.attendedClasses)} class to gain 75% attendence",
                                   maxLines: 3,
                                   style: const TextStyle(
                                     fontSize: 12,
@@ -185,10 +207,28 @@ class _AttendenceWidgetState extends State<AttendenceWidget> {
                                 // minimumSize: MediaQuery.of(context).size * 0.25,
                                 shadowColor: Colors.black,
                               ),
-                              onPressed: () {
-                                widget.attendence.totalClasses =
-                                    widget.attendence.totalClasses + 1;
-                                widget.editSubject(widget.attendence);
+                              onPressed: () async {
+                                widget.subject.totalClasses =
+                                    widget.subject.totalClasses + 1;
+                                int statusCode =
+                                    await Provider.of<SubjectProvider>(context,
+                                            listen: false)
+                                        .markAttendance(
+                                  attendedClasses:
+                                      widget.subject.attendedClasses,
+                                  totalClasses: widget.subject.totalClasses,
+                                  isAttended: true,
+                                  id: widget.subject.id,
+                                );
+
+                                // ignore: unused_local_variable
+                                String statusText = "";
+
+                                if (statusCode == 201) {
+                                  statusText = "Attendance Marked Successfully";
+                                } else {
+                                  statusText = "Unable to mark the attendance";
+                                }
                                 setState(() {});
                               },
                               child: const Text(
@@ -199,7 +239,7 @@ class _AttendenceWidgetState extends State<AttendenceWidget> {
                         ),
                       ),
                       // Text(
-                      //   "${((widget.attendence.attendedClasses / widget.attendence.totalClasses) * 100).roundToDouble()}",
+                      //   "${((widget.subject.attendedClasses / widget.subject.totalClasses) * 100).roundToDouble()}",
                       //   style: const TextStyle(fontSize: 30, color: Colors.purple),
                       // )
                     ],
@@ -214,15 +254,15 @@ class _AttendenceWidgetState extends State<AttendenceWidget> {
             child: Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: (widget.attendence.totalClasses == 0)
+                color: (widget.subject.totalClasses == 0)
                     ? null
                     : Colors.purple[50],
                 borderRadius: BorderRadius.circular(5),
               ),
               child: Text(
-                (widget.attendence.totalClasses == 0)
+                (widget.subject.totalClasses == 0)
                     ? ""
-                    : "${((widget.attendence.attendedClasses / widget.attendence.totalClasses) * 100).roundToDouble()}",
+                    : "${((widget.subject.attendedClasses / widget.subject.totalClasses) * 100).roundToDouble()}",
                 style: const TextStyle(fontSize: 18, color: Colors.deepPurple),
               ),
             ),
@@ -265,7 +305,7 @@ class _AttendenceWidgetState extends State<AttendenceWidget> {
                                                   context,
                                                   listen: false)
                                               .deleteSubject(
-                                        id: widget.attendence.id,
+                                        id: widget.subject.id,
                                       );
                                       Navigator.of(context).pop();
                                       ScaffoldMessenger.of(context)
@@ -299,7 +339,7 @@ class _AttendenceWidgetState extends State<AttendenceWidget> {
                         ),
                       );
                     });
-                // widget.deleteSubject(widget.attendence);
+                // widget.deleteSubject(widget.subject);
               },
             ),
           ),

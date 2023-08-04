@@ -30,6 +30,8 @@ model Subject {
   totalClasses    Int      @default(0)
   attendedClasses Int      @default(0)
   updates         Update[]
+
+  @@unique([id, belongsToId])
 }
 
 model Update {

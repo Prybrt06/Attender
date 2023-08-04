@@ -1,10 +1,10 @@
-import 'package:attender/Model/AttendanceModel.dart';
+import 'package:attender/Model/SubjectModel.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
 class SubjectDetailsScreen extends StatefulWidget {
   final Function editSubject;
-  final AttendanceModel attendance;
+  final SubjectModel attendance;
   const SubjectDetailsScreen({
     required this.attendance,
     required this.editSubject,
@@ -57,7 +57,7 @@ class _SubjectDetailsScreenState extends State<SubjectDetailsScreen> {
 }
 
 class EditPopUp extends StatefulWidget {
-  final AttendanceModel attendence;
+  final SubjectModel attendence;
   final Function editSubject;
   final VoidCallback update;
   EditPopUp({
@@ -71,25 +71,25 @@ class EditPopUp extends StatefulWidget {
 }
 
 class _EditPopUpState extends State<EditPopUp> {
-  void incTotalClass(AttendanceModel at) {
+  void incTotalClass(SubjectModel at) {
     setState(() {
       at.totalClasses++;
     });
   }
 
-  void decTotalClass(AttendanceModel at) {
+  void decTotalClass(SubjectModel at) {
     setState(() {
       at.totalClasses--;
     });
   }
 
-  void incAttendedClass(AttendanceModel at) {
+  void incAttendedClass(SubjectModel at) {
     setState(() {
       at.attendedClasses++;
     });
   }
 
-  void decAttendedClass(AttendanceModel at) {
+  void decAttendedClass(SubjectModel at) {
     setState(() {
       at.attendedClasses--;
     });
@@ -198,7 +198,7 @@ class _EditPopUpState extends State<EditPopUp> {
             ),
             ElevatedButton(
               onPressed: () {
-                AttendanceModel attendance = AttendanceModel(
+                SubjectModel attendance = SubjectModel(
                   id: widget.attendence.id,
                   subjectName: widget.attendence.subjectName,
                   subjectCode: subjectCodeCotroller.text,

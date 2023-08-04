@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:attender/Model/AttendanceModel.dart';
+import 'package:attender/Model/SubjectModel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class StorageHandler {
@@ -45,7 +45,7 @@ class StorageHandler {
     return 1;
   }
 
-  void saveAttendence(List<AttendanceModel> attendence) {
+  void saveAttendence(List<SubjectModel> attendence) {
     String jsonData = jsonEncode(attendence);
     _preferencs!.setString(listKey, jsonData);
   }

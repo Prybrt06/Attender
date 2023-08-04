@@ -1,15 +1,15 @@
 import 'dart:convert';
 
-import 'package:attender/Model/AttendanceModel.dart';
+import 'package:attender/Model/SubjectModel.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 import '../utils/storageHandler.dart';
 
 class SubjectProvider with ChangeNotifier {
-  var apiUrl = "http://localhost:3001/subject";
+  var apiUrl = "http://localhost:4000/subject";
 
-  Future<List<AttendanceModel>> getAllAttendences() async {
+  Future<List<SubjectModel>> getAllSubject() async {
     var res = await http.get(Uri.parse(apiUrl), headers: {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
@@ -20,12 +20,12 @@ class SubjectProvider with ChangeNotifier {
     int len = jsonResponse["subjects"].length;
     print(len);
 
-    List<AttendanceModel> attendences = [];
+    List<SubjectModel> attendences = [];
 
     for (int i = 0; i < len; i++) {
-      AttendanceModel attendence = AttendanceModel(
+      SubjectModel attendence = SubjectModel(
         id: jsonResponse["subjects"][i]["id"],
-        subjectName: jsonResponse["subjects"][i]["subjectName"],
+        subjectName: jsonResponse["subjects"][i]["name"],
         subjectCode: jsonResponse["subjects"][i]["subjectCode"],
         totalClasses: jsonResponse["subjects"][i]["totalClasses"],
         attendedClasses: jsonResponse["subjects"][i]["attendedClasses"],
@@ -43,13 +43,11 @@ class SubjectProvider with ChangeNotifier {
     required String subjectCode,
   }) async {
     Map jsonBody = {
-      "subjectName": subjectName,
+      "name": subjectName,
       "subjectCode": subjectCode,
-      "totalClasses": 0,
-      "attendedClasses": 0
     };
     var res = await http.post(
-      Uri.parse(apiUrl),
+      Uri.parse("$apiUrl/create"),
       headers: {
         'Authorization': 'bearer ${StorageHandler().getToken()}',
         'Content-Type': 'application/json',
@@ -66,8 +64,9 @@ class SubjectProvider with ChangeNotifier {
   }
 
   Future<String> deleteSubject({required String id}) async {
+    print('$apiUrl/delete/$id');
     var res = await http.delete(
-      Uri.parse('${apiUrl}/$id'),
+      Uri.parse('$apiUrl/delete/$id'),
       headers: {
         'Authorization': 'bearer ${StorageHandler().getToken()}',
       },
@@ -78,5 +77,30 @@ class SubjectProvider with ChangeNotifier {
     } else {
       return "We are not able to delete the subject at this moment";
     }
+  }
+
+  Future<int> markAttendance({
+    required int totalClasses,
+    required int attendedClasses,
+    required bool isAttended,
+    required String id,
+  }) async {
+    Map jsonBody = {
+      "totalClasses": totalClasses,
+      "attendedClasses": attendedClasses,
+      "isAttended": isAttended,
+    };
+
+    var res = await http.put(
+      Uri.parse('$apiUrl/markAttendance/$id'),
+      headers: {
+        'Authorization': 'bearer ${StorageHandler().getToken()}',
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: json.encode(jsonBody),
+    );
+
+    return res.statusCode;
   }
 }

@@ -19,7 +19,7 @@ export const getAllSubject = async (req, res, next) => {
 	}
 
 	res.status(201);
-	res.json({ subject: subjects });
+	res.json({ subjects: subjects });
 };
 
 // Get a single subject of a user with the use of id
@@ -63,8 +63,10 @@ export const updateAttendence = async (req, res, next) => {
 
 	const subject = await prisma.subject.update({
 		where: {
-			id: id,
-			belongsToId: req.user.id,
+			id_belongsToId: {
+				id: id,
+				belongsToId: req.user.id,
+			},
 		},
 		data: {
 			totalClasses: req.body.totalClasses,
@@ -88,11 +90,14 @@ export const updateAttendence = async (req, res, next) => {
 export const updateSubject = async (req, res, next) => {
 	const id = req.params.id;
 
-    console.log(id);
+	console.log(id);
 
 	const subject = await prisma.subject.update({
 		where: {
-			id: id,
+			id_belongsToId: {
+				id: id,
+				belongsToId: req.user.id,
+			},
 		},
 		data: {
 			name: req.body.name,
@@ -114,11 +119,16 @@ export const updateSubject = async (req, res, next) => {
 
 // Delete a subject
 export const deleteSubject = async (req, res) => {
+	console.log("hello");
 	const id = req.params.id;
+	console.log(id);
 
 	const subject = await prisma.subject.delete({
 		where: {
-			id: id,
+			id_belongsToId: {
+				id: id,
+				belongsToId: req.user.id,
+			},
 		},
 	});
 
