@@ -1,6 +1,6 @@
 # Attender Project
 
-Attender is a project that consists of a backend and a frontend. The backend is responsible for running the server, while the frontend is built using Flutter and allows you to run the app.
+Attender is a flutter app which can be used by the student of any college to maintain their attendance record efficiently.
 
 ## Prerequisites
 
