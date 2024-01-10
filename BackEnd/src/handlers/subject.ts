@@ -12,12 +12,6 @@ export const getAllSubject = async (req, res, next) => {
 	});
 	const subjects = user.subjects;
 
-	if (subjects == null) {
-		res.status(200);
-		res.json({ message: "You have no subjects" });
-		return;
-	}
-
 	res.status(201);
 	res.json({ subjects: subjects });
 };
@@ -83,6 +77,27 @@ export const updateAttendence = async (req, res, next) => {
 	res.status(201);
 	res.json({ subject: subject });
 
+	next();
+};
+
+//mark attendance
+export const markAttendance = async (req, res, next) => {
+	const id = req.params.id;
+
+	const subject = await prisma.subject.update({
+		where: {
+			id_belongsToId: {
+				id: id,
+				belongsToId: req.user.id,
+			},
+		},
+		data: {
+			totalClasses: { increment: 1 },
+			attendedClasses: { increment: req.body.isAttended ? 1 : 0 },
+		},
+	});
+
+	res.status(201).json({ updatedSubject: subject });
 	next();
 };
 

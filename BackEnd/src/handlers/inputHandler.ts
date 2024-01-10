@@ -7,7 +7,7 @@ export const inputHandler = (req, res, next) => {
 
 	if (!errors.isEmpty()) {
 		res.status(400);
-		res.json({ message: "Required Fields are Missing" });
+		res.json({ errors: errors.array() });
 		return;
 	}
 

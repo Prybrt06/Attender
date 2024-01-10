@@ -5,10 +5,12 @@ import {
 	deleteSubject,
 	getAllSubject,
 	getOneSubject,
+	markAttendance,
 	updateAttendence,
 	updateSubject,
 } from "../handlers/subject";
 import { createUpdate } from "../handlers/update";
+import { inputHandler } from "../handlers/inputHandler";
 
 const subjectRoute = Router();
 
@@ -20,15 +22,15 @@ subjectRoute.post(
 	"/create",
 	body("name").isString(),
 	body("subjectCode").isString(),
+	inputHandler,
 	createSubject
 );
 
-subjectRoute.put(
+subjectRoute.post(
 	"/markAttendance/:id",
-	body("totalClasses").isInt(),
-	body("attendedClasses").isInt(),
 	body("isAttended").isBoolean(),
-	updateAttendence,
+	inputHandler,
+	markAttendance,
 	createUpdate
 );
 
@@ -38,6 +40,7 @@ subjectRoute.put(
 	body("subjectCode").isString(),
 	body("totalClasses").isInt(),
 	body("attendedClasses").isInt(),
+	inputHandler,
 	updateSubject
 );
 

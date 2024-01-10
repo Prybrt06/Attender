@@ -26,7 +26,7 @@ model Subject {
   subjectCode     String   @db.VarChar(255)
   createdAt       DateTime @default(now())
   belongsToId     String
-  belongsTo       User     @relation(fields: [belongsToId], references: [id])
+  belongsTo       User     @relation(fields: [belongsToId], references: [id],onDelete: Cascade)
   totalClasses    Int      @default(0)
   attendedClasses Int      @default(0)
   updates         Update[]
@@ -39,7 +39,7 @@ model Update {
   createdAt       DateTime @default(now())
   isAttended      Boolean
   subjectId       String
-  subject         Subject  @relation(fields: [subjectId], references: [id])
+  subject         Subject  @relation(fields: [subjectId], references: [id],onDelete: Cascade)
   belongsToUserId String
-  belongsToUser   User     @relation(fields: [belongsToUserId], references: [id])
+  belongsToUser   User     @relation(fields: [belongsToUserId], references: [id],onDelete: Cascade)
 }

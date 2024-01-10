@@ -13,7 +13,7 @@ export const createNewUser = async (req, res) => {
 	});
 
 	const token = createJWT(user);
-    res.status(200)
+	res.status(201);
 	res.json({ token });
 };
 
@@ -23,6 +23,11 @@ export const signin = async (req, res) => {
 			username: req.body.username,
 		},
 	});
+
+	if (!user) {
+		res.status(404).json({ message: "User not found" });
+		return;
+	}
 
 	var isPasswordValid = await comparePasswords(
 		req.body.password,
@@ -34,6 +39,8 @@ export const signin = async (req, res) => {
 		res.json({ message: "invalid password" });
 		return;
 	}
+
+	console.log("hhlfjkdhsjklahfkljhj");
 
 	const token = createJWT(user);
 	res.status(201);

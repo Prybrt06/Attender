@@ -1,7 +1,9 @@
 import express from "express";
-import subjectRoute from "./routes/subjectRouter";
 import morgan from "morgan";
 import cors from "cors";
+
+import subjectRoute from "./routes/subjectRouter";
+
 import { protect } from "./modules/auth";
 import { createNewUser, signin } from "./handlers/user";
 import { body } from "express-validator";
